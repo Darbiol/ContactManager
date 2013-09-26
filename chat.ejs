@@ -1,0 +1,101 @@
+<!DOCTYPE>
+
+<html>
+<head>
+	<title>CHATTER BOX</title>
+
+<style>
+div{
+	display:block;
+}
+body{
+	background-color: #D8D8D8;
+}
+#container{
+	height: 550px;
+	width: 600px;
+	background-color: #FFFFFF;
+	margin-left: 380px;
+	border-radius: 5px;
+}
+#header{
+	height: 60px;
+}
+#header h2{
+	position: absolute;
+	font-family: arial;
+	margin-left: 130px;
+	margin-top: 20px;
+}
+#chat_window{
+	position: relative;
+	height: 350px;
+	width: 500px;
+	border: 5px solid black;
+	margin-left: 50px;
+	margin-top: 10px;
+	overflow: auto;
+}
+#chat_window ul{
+	list-style-type: none;
+	margin-left:-30px;
+}
+#chat_window ul li span{
+	font-family: sans-serif;
+	font-size: 20px;
+}
+#chatbar{
+	position: relative;
+	margin-top: 30px;
+	margin-left: 50px;
+	height: 60px;
+	width: 600px;
+}
+#chatbar input:first-child{
+	height: 30px;
+	width: 430px;
+	font-size: 20px;
+}
+#send_chat{
+	height: 32px;
+}
+
+</style>
+</head>
+<body>
+<div id="container">
+	<div id="header"><h2>[CHATTER B([])X v1.0]</h2></div>
+	<div id="chat_window">
+		<ul id="chat">
+			
+		</ul>
+	</div>
+	<div id="chatbar">
+		<form id="chatForm">
+			<input type="text" id="chatInput" name="chatInput"><input type="submit" id="send_chat" value="Send!">
+		</form>
+	</div>
+</div>
+<script type="text/javascript" src="/scripts/jquery.js"></script>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script>
+	$(document).ready(function(){
+		var socket = io.connect();
+		var $messegeForm = $('#chatForm');
+		var $messege = $('#chatInput');
+		var $chat = $('#chat');
+		console.log("ready");
+
+		$messegeForm.submit(function(e){
+			e.preventDefault();
+			socket.emit('send messege', {messege: $messege.val()});
+			$messege.val('');
+		});
+
+		socket.on('broadcast', function(data){
+			$chat.append('<li><span id="user">dadan</span>:<span>'+data.messege+'</span></li>');
+		});
+	});
+</script>
+</body>
+</html>
